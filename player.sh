@@ -21,7 +21,7 @@ if [ $# -lt 2 ]; then
     echo "    moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD"
     echo "    country: 3 letters country identification eg: FRA (if not supplied, all countries available for the first 2 args will be shown)"
     echo -e "\nexample: player.sh 1960 SLOW,FAST FRA"
-    echo -e "\nsystem commands needed: curl, mplayer (or builtin play for osx)"
+    echo -e "\nsystem commands needed: curl, mpv (or builtin play for osx)"
     exit
 fi
 
