@@ -32,8 +32,6 @@ q_moods=`echo \"$moods\" | sed 's/,/","/'`
 
 echo -e "Using '$player' system command\n"
 
-echo $q_moods
-
 avail_moods=`curl -s ${moods_curl}${decade}?moods=${moods} | grep -Eoh "[A-Z]{3}|," | tr -d "\n"`
 
 if [ $# -eq 2 ]; then
