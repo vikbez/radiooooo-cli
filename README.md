@@ -7,7 +7,7 @@ usage
 -----
 ```
 >./player.sh
-radiooooo-cli 1.0.0 - command line player for http://radiooooo.com
+radiooooo-cli 1.1.0 - command line player for http://radiooooo.com
 
 Usage: player.sh [decade] [moods] [country]
     decade: can be from 1910 to 2010 in 10 increments
@@ -16,5 +16,5 @@ Usage: player.sh [decade] [moods] [country]
 
 example: player.sh 1960 SLOW,FAST FRA
 
-system commands needed: curl, mplayer (or builtin play for osx)
+system commands needed: curl, mpv (or builtin play for osx)
 ```

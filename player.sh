@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version='1.0.0'
+version='1.1.0'
 player='mpv'
 unamestr=`uname`
 moods_curl='http://radiooooo.com/api/playlist/countriesByTempos/'
