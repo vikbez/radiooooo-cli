@@ -42,5 +42,5 @@ fi
 while true; do
     echo "Fetching a new song for $decade - $moods - $country"
     next_song=`curl -s ${song_curl} -H "Content-Type: application/json" --data-binary "{\"decade\":\"${decade}\",\"country\":\"${country}\",\"moods\":[${q_moods}]}" | grep -Eoh "http://[^\"]+" | head -n 1`
-    play $next_song
+    ${player} $next_song
 done
