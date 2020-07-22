@@ -1,20 +1,20 @@
 radiooooo-cli
 =============
 
-http://radiooooo.com command line player
+https://radiooooo.com command line player
 
 usage
 -----
 ```
 >./player.sh
-radiooooo-cli 1.1.0 - command line player for http://radiooooo.com
+radiooooo-cli 2.0 - command line player for https://radiooooo.com
 
-Usage: player.sh [decade] [moods] [country]
-    decade: can be from 1910 to 2010 in 10 increments
-    moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD
-    country: 3 letters country identification eg: FRA (if not supplied, all countries available for the first 2 args will be shown)
+Usage: player.sh [decades] [moods] [countries]
+    - decades: contains comma-separated decade list: eg: 1920,1950,1990. (decade can be from 1910 to 2020 in 10 year increments)"
+    - moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD
+    - countries: contains comma-separated country list: eg: FRA,USA,ITA. (3 letters country isocode eg: FRA)
 
-example: player.sh 1960 SLOW,FAST FRA
+example: player.sh 1960,1980 SLOW,FAST FRA,ITA
 
-system commands needed: curl, mpv (or builtin play for osx)
+system commands needed: curl, mpg123
 ```
