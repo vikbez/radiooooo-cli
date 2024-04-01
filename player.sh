@@ -37,12 +37,12 @@ echo -e "Using '$player' system command\n"
 
 while true; do
     echo "Fetching a new song for $decades - $moods - $country"
-    json_response=`curl -s -X POST ${song_curl} -H "Content-Type: application/json" -d "{\"mode\":\"${mode}\",\"moods\":[${q_moods}],\"decades\":[${decades}],\"isocodes\":[$q_countries]}"`
+    json_response=`curl -s -X POST $song_curl -H "Content-Type: application/json" -d "{\"mode\":\"$mode\",\"moods\":[$q_moods],\"decades\":[$decades],\"isocodes\":[$q_countries]}"`
     json_error=`echo $json_response | jq -r ".error"`
     if [ "$json_error" != "null" ]; then
         echo "Error: $json_error"
         exit 1
     fi
-    song_url=`echo $json_response | jq -r ".links.${format}"`
-    ${player} $song_url
+    song_url=`echo $json_response | jq -r ".links.$format"`
+    $player $song_url
 done
