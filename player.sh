@@ -18,9 +18,9 @@ echo -e "radiooooo-cli $version - command line player for https://radiooooo.com\
 
 if [ $# -lt 2 ]; then
     echo "Usage: player.sh [decades] [moods] [countries]"
-    echo -e "    - decades: contains comma-separated decade list: eg: 1920,1950,1990\n    (decade can be from 1910 to 2020 in 10 year increments)"
+    echo -e "    - decades: contains comma-separated decade list: eg: 1920,1950,1990\n      (decade can be from 1910 to 2020 in 10 year increments)"
     echo -e "    - moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD"
-    echo -e "    - countries: contains comma-separated country list: eg: FRA,USA,ITA.\n    (3 letters country isocode eg: FRA)"
+    echo -e "    - countries: contains comma-separated country list: eg: FRA,USA,ITA\n      (3 letters country isocode eg: FRA)"
     echo -e "\nexample: player.sh 1960,1980 SLOW,FAST FRA,ITA"
     echo -e "\nsystem commands needed: curl, jq, mpv"
     exit
