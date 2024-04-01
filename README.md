@@ -16,5 +16,5 @@ Usage: player.sh [decades] [moods] [countries]
 
 example: player.sh 1960,1980 SLOW,FAST FRA,ITA
 
-system commands needed: curl, mpg123
+system commands needed: curl, jq, mpv
 ```

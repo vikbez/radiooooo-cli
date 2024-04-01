@@ -1,9 +1,10 @@
 #!/bin/bash
 
 version='2.0.0'
-player='mpg123'
+player='mpv --no-video'
 unamestr=`uname`
 song_curl='https://radiooooo.com/play'
+format='mpeg'
 mode='explore'
 
 # for osx, use play
@@ -21,7 +22,7 @@ if [ $# -lt 2 ]; then
     echo -e "    - moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD"
     echo -e "    - countries: contains comma-separated country list: eg: FRA,USA,ITA.\n    (3 letters country isocode eg: FRA)"
     echo -e "\nexample: player.sh 1960,1980 SLOW,FAST FRA,ITA"
-    echo -e "\nsystem commands needed: curl, mpg123"
+    echo -e "\nsystem commands needed: curl, jq, mpv"
     exit
 fi
 
@@ -36,18 +37,7 @@ echo -e "Using '$player' system command\n"
 
 while true; do
     echo "Fetching a new song for $decades - $moods - $country"
-
-    track=`curl -s -X POST ${song_curl} -H "Content-Type: application/json" -d "{\"mode\":\"${mode}\",\"moods\":[${q_moods}],\"decades\":[${decades}],\"isocodes\":[$q_countries]}"`
-
-    echo -e "\nPlaying:\n"
-    
-    echo $track | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^"title"/ {print "Title:"$2}'
-    echo $track | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^"album"/ {print "Album:"$2}'
-    echo $track | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^"artist"/ {print "Artist:"$2}'
-    echo $track | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^"year"/ {print "Year:"$2}'
-
-
-    mpeg=`echo $track | sed -e 's/"//g' | awk -v RS=',"' -F: '/^links/ {print $3":"$4}'`
-    play=`curl -s $mpeg | mpg123 -q -`
-
+    song_json=`curl -s -X POST ${song_curl} -H "Content-Type: application/json" -d "{\"mode\":\"${mode}\",\"moods\":[${q_moods}],\"decades\":[${decades}],\"isocodes\":[$q_countries]}"`
+    song_url=`echo $song_json | jq -r ".links.${format}"`
+    ${player} $song_url
 done
