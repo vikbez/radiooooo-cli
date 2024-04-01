@@ -1,10 +1,11 @@
 #!/bin/bash
 
-version='1.1.0'
-player='mpv'
+version='2.0.0'
+player='mpv --no-video'
 unamestr=`uname`
-moods_curl='http://radiooooo.com/api/playlist/countriesByTempos/'
-song_curl='http://radiooooo.com/api/playlist/next'
+song_curl='https://radiooooo.com/play'
+format='mpeg'
+mode='explore'
 
 # for osx, use play
 if [[ "$unamestr" == 'Darwin' ]]; then
@@ -13,34 +14,35 @@ fi
 
 trap "echo Exited!; exit;" SIGINT SIGTERM
 
-echo -e "radiooooo-cli $version - command line player for http://radiooooo.com\n"
+echo -e "radiooooo-cli $version - command line player for https://radiooooo.com\n"
 
 if [ $# -lt 2 ]; then
-    echo "Usage: player.sh [decade] [moods] [country]"
-    echo "    decade: can be from 1910 to 2010 in 10 increments"
-    echo "    moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD"
-    echo "    country: 3 letters country identification eg: FRA (if not supplied, all countries available for the first 2 args will be shown)"
-    echo -e "\nexample: player.sh 1960 SLOW,FAST FRA"
-    echo -e "\nsystem commands needed: curl, mpv (or builtin play for osx)"
+    echo "Usage: player.sh [decades] [moods] [countries]"
+    echo -e "    - decades: contains comma-separated decade list: eg: 1920,1950,1990\n      (decade can be from 1910 to 2020 in 10 year increments)"
+    echo -e "    - moods: contains comma-separated mood list: eg: SLOW,FAST,WEIRD"
+    echo -e "    - countries: contains comma-separated country list: eg: FRA,USA,ITA\n      (3 letters country isocode eg: FRA)"
+    echo -e "\nexample: player.sh 1960,1980 SLOW,FAST FRA,ITA"
+    echo -e "\nsystem commands needed: curl, jq, mpv"
     exit
 fi
 
-decade=$1
+decades=$1
 moods=$2
 country=$3
+
 q_moods=`echo \"$moods\" | sed 's/,/","/'`
+q_countries=`echo \"$country\" | sed 's/,/","/'`
 
 echo -e "Using '$player' system command\n"
 
-avail_moods=`curl -s ${moods_curl}${decade}?moods=${moods} | grep -Eoh "[A-Z]{3}|," | tr -d "\n"`
-
-if [ $# -eq 2 ]; then
-    echo -e "Available countries for ${decade} - ${moods}:\n$avail_moods"
-    exit
-fi
-
 while true; do
-    echo "Fetching a new song for $decade - $moods - $country"
-    next_song=`curl -s ${song_curl} -H "Content-Type: application/json" --data-binary "{\"decade\":\"${decade}\",\"country\":\"${country}\",\"moods\":[${q_moods}]}" | grep -Eoh "http://[^\"]+" | head -n 1`
-    ${player} $next_song
+    echo "Fetching a new song for $decades - $moods - $country"
+    json_response=`curl -s -X POST $song_curl -H "Content-Type: application/json" -d "{\"mode\":\"$mode\",\"moods\":[$q_moods],\"decades\":[$decades],\"isocodes\":[$q_countries]}"`
+    json_error=`echo $json_response | jq -r ".error"`
+    if [ "$json_error" != "null" ]; then
+        echo "Error: $json_error"
+        exit 1
+    fi
+    song_url=`echo $json_response | jq -r ".links.$format"`
+    $player $song_url
 done
